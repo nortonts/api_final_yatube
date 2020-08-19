@@ -1,30 +1,29 @@
 from rest_framework import viewsets, exceptions, generics, filters
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from django_filters.rest_framework import DjangoFilterBackend
 from .models import *
 from .serializers import *
 from django.shortcuts import get_object_or_404
 from .permissions import IsOwnerOrReadOnly
-
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class PostViewSet(viewsets.ModelViewSet):
     permission_classes = (IsOwnerOrReadOnly,)
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    #filter_backends = [filters.SearchFilter]
-    
     filter_backends = (DjangoFilterBackend, )
     filterset_fields = ('group', )
+
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
-    
+     
 class GroupViewSet(viewsets.ModelViewSet):
     permission_classes = (IsOwnerOrReadOnly,)
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
@@ -48,5 +47,4 @@ class FollowView(generics.ListCreateAPIView):
     search_fields = ('=user__username', '=following__username')
 
     def perform_create(self, serializer):
-        user = self.request.user
-        serializer.save(user=user)       
+        serializer.save(user=self.request.user)       

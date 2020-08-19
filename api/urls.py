@@ -12,6 +12,7 @@ router_v1.register(r'posts', PostViewSet, basename='posts')
 router_v1.register(r'posts/(?P<id>\d+)/comments', CommentViewSet,
                 basename='comments') 
 router_v1.register(r'group', GroupViewSet, basename='group')                 
+#router_v1.register(r'follow', FollowView, basename='follow')   
 
 urlpatterns = [
         path('v1/', include(router_v1.urls)),
