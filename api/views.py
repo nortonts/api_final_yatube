@@ -1,4 +1,4 @@
-from rest_framework import viewsets, exceptions, generics, filters
+from rest_framework import viewsets, exceptions, filters
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from .models import *
@@ -19,7 +19,7 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user)
 
      
-class GroupViewSet(viewsets.ModelViewSet):
+class GroupView(viewsets.ModelViewSet):
     permission_classes = (IsOwnerOrReadOnly,)
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
@@ -39,7 +39,7 @@ class CommentViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user, post=post)
 
 
-class FollowView(generics.ListCreateAPIView):
+class FollowView(viewsets.ModelViewSet):
     queryset = Follow.objects.all()
     serializer_class = FollowSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
